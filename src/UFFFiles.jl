@@ -9,7 +9,8 @@ module UFFFiles
     export readuff, writeuff
 
     # Helper functions
-    export connectivity_matrix, dataset_types, supported_datasets
+    export connectivity_matrix, dataset_type, dataset55_to_mat,
+           dataset58_to_mat, supported_datasets
 
     # Include files
     include("uff_utils.jl")

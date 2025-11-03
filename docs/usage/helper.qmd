@@ -16,49 +16,19 @@ execute:
 using UFFFiles
 ```
 
-`UFFFiles.jl` provides several helper functions to facilitate interaction with UFF datasets. At the moment, the following helper functions are available:
+`UFFFiles.jl` provides several helper functions to facilitate interaction with UFF datasets.
 
-- `connectivity_matrix`: Returns the connectivity matrix extracted from `Dataset2412`.
-- `dataset_types`: Returns the list of all dataset types extracted from an UFF file.
-- `supported_datasets`: Lists all dataset types that are currently supported for reading.
-
-## API
+## Dataset Type
 
 ::: {.api}
 ```{julia}
 #| echo: false
-@doc connectivity_matrix
+@doc dataset_type
 ```
 :::
 
-::: {.api}
-```{julia}
-#| echo: false
-@doc dataset_types
-```
-:::
-
-::: {.api}
-```{julia}
-#| echo: false
-@doc supported_datasets
-```
-:::
-
-## Example usage
-
-### Connectivity Matrix
 ```julia
-using UFFFilesReader
-
-# readuff returns a vector of datasets
-data2412 = readuff("path/to/your/file2412.uff")[1]
-connectivity = connectivity_matrix(data2412)
-```
-
-### Dataset Types
-```julia
-using UFFFilesReader
+using UFFFiles
 
 # Only one dataset is read
 data = readuff("path/to/your/file.uff")[1]
@@ -69,9 +39,72 @@ data_all = readuff("path/to/your/file.uff")
 dtypes = dataset_types.(data_all)
 ```
 
-### Supported Datasets
+## Supported Datasets
+
+::: {.api}
+```{julia}
+#| echo: false
+@doc supported_datasets
+```
+:::
+
 ```julia
-using UFFFilesReader
+using UFFFiles
 
 valid_datasets = supported_datasets()
+```
+
+## Connectivity Matrix
+
+::: {.api}
+```{julia}
+#| echo: false
+@doc connectivity_matrix
+```
+:::
+
+```julia
+using UFFFiles
+
+# readuff returns a vector of datasets
+data2412 = readuff("path/to/your/file2412.uff")[1]
+connectivity = connectivity_matrix(data2412)
+```
+
+## Dataset 55 to matrix
+
+::: {.api}
+```{julia}
+# | echo: false
+@doc dataset55_to_mat
+```
+:::
+
+```julia
+using UFFFiles
+
+# Let's assume you have read a UFF file containing dataset 55 only
+data55 = readuff("path/to/your/file55.uff")
+
+# Convert dataset 55 to a matrix
+matrix55, x = dataset55_to_mat(data55)
+```
+
+## Dataset 58 to matrix
+
+::: {.api}
+```{julia}
+# | echo: false
+@doc dataset58_to_mat
+```
+:::
+
+```julia
+using UFFFiles
+
+# Let's assume you have read a UFF file containing dataset 58 only
+data58 = readuff("path/to/your/file58.uff")
+
+# Convert dataset 58 to a matrix
+matrix58, x = dataset58_to_matrix(data58)
 ```

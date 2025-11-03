@@ -265,7 +265,7 @@ A struct containing UFF Dataset 58 metadata.
     ord_dtype::Int            # Record 7 - field 1
     num_pts::Int              # Record 7 - field 2
     abs_spacing_type::Int     # Record 7 - field 3
-    abs_start ::Float64       # Record 7 - field 4
+    abs_min ::Float64       # Record 7 - field 4
     abs_increment ::Float64   # Record 7 - field 5
     zval::Float64             # Record 7 - field 6
 
@@ -323,7 +323,7 @@ A struct containing UFF Dataset 58 metadata.
         ord_dtype = 0,
         num_pts = 0,
         abs_spacing_type = 0,
-        abs_start = 0.0,
+        abs_min = 0.0,
         abs_increment = 0.0,
         zval = 0.0,
         abs_spec_dtype = 0,
@@ -351,7 +351,7 @@ A struct containing UFF Dataset 58 metadata.
         z_axis_label = "",
         z_axis_unit_label = "",
         data = [],
-    ) = new(:Dataset58, id1, id2, id3, id4, id5, func_type, func_id, ver_num, load_case, resp_name, resp_node, resp_dir, ref_name, ref_node, ref_dir, ord_dtype, num_pts, abs_spacing_type, abs_start, abs_increment, zval, abs_spec_dtype, abs_len_unit_exp, abs_force_unit_exp, abs_temp_unit_exp, abs_axis_label, abs_axis_unit_label, ord_spec_dtype, ord_len_unit_exp, ord_force_unit_exp, ord_temp_unit_exp, ord_axis_label, ord_axis_unit_label, ord_denom_spec_dtype, ord_denom_len_unit_exp, ord_denom_force_unit_exp, ord_denom_temp_unit_exp, ord_denom_axis_label, ord_denom_axis_unit_label, z_spec_dtype, z_len_unit_exp, z_force_unit_exp, z_temp_unit_exp, z_axis_label, z_axis_unit_label, data)
+    ) = new(:Dataset58, id1, id2, id3, id4, id5, func_type, func_id, ver_num, load_case, resp_name, resp_node, resp_dir, ref_name, ref_node, ref_dir, ord_dtype, num_pts, abs_spacing_type, abs_min, abs_increment, zval, abs_spec_dtype, abs_len_unit_exp, abs_force_unit_exp, abs_temp_unit_exp, abs_axis_label, abs_axis_unit_label, ord_spec_dtype, ord_len_unit_exp, ord_force_unit_exp, ord_temp_unit_exp, ord_axis_label, ord_axis_unit_label, ord_denom_spec_dtype, ord_denom_len_unit_exp, ord_denom_force_unit_exp, ord_denom_temp_unit_exp, ord_denom_axis_label, ord_denom_axis_unit_label, z_spec_dtype, z_len_unit_exp, z_force_unit_exp, z_temp_unit_exp, z_axis_label, z_axis_unit_label, data)
 end
 
 """

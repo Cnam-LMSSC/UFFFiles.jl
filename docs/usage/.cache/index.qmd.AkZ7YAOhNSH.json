@@ -30,6 +30,11 @@
                 "using UFFFiles"
             ],
             "outputs": [
+                {
+                    "output_type": "stream",
+                    "name": "stdout",
+                    "text": "\u001b[32m\u001b[1mPrecompiling\u001b[22m\u001b[39m packages...\n    353.4 ms\u001b[32m  ✓ \u001b[39mUFFFiles\n  1 dependency successfully precompiled in 0 seconds. 2 already precompiled.\n"
+                }
             ],
             "execution_count": 1
         },
@@ -40,7 +45,11 @@
             },
             "source": [
                 "\n",
-                "At the moment, `UFFFiles.jl` only implements reading functionalities through the function `readuff`. Future versions will include additional functionalities for writing UFF data in a given format.\n",
+                "`UFFFiles.jl` implements reading and writing functionalities through the functions `readuff` and `writeuff`.\n",
+                "\n",
+                "::: {.callout-note}\n",
+                "`UFFDataset` is an abstract type representing a generic UFF dataset. Each specific UFF dataset type (e.g., `Dataset15`, `Dataset58`, etc.) is a concrete subtype of `UFFDataset`.\n",
+                ":::\n",
                 "\n",
                 "## Reading UFF Files\n",
                 "\n",
@@ -96,11 +105,53 @@
                 "\n",
                 "# Access to the list of node coordinates\n",
                 "node_coords = d15.coords\n",
-                "```"
+                "```\n",
+                "\n",
+                "## Writing UFF Files\n",
+                "\n",
+                "```julia\n",
+                "writeuff(\"path/to/your/file.uff\", data)\n",
+                "```\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "6",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "@doc writeuff"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36mwriteuff(filename::String, data::Vector{UFFDataset})\u001b[39m\n\n  Writes a vector of UFFDataset objects to a UFF file.\n\n  \u001b[1mInput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mfilename::String\u001b[39m: The path to the UFF file to be written.\n    \u001b[34m• \u001b[39m \u001b[36mdata::Vector{UFFDataset}\u001b[39m: A vector containing the UFF datasets to\n       be\n\n  written.",
+                        "text/markdown": "```julia\nwriteuff(filename::String, data::Vector{UFFDataset})\n```\n\nWrites a vector of UFFDataset objects to a UFF file.\n\n**Input**\n\n  * `filename::String`: The path to the UFF file to be written.\n  * `data::Vector{UFFDataset}`: A vector containing the UFF datasets to be\n\nwritten.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">writeuff&#40;filename::String, data::Vector&#123;UFFDataset&#125;&#41;</code></pre>\n<p>Writes a vector of UFFDataset objects to a UFF file.</p>\n<p><strong>Input</strong></p>\n<ul>\n<li><p><code>filename::String</code>: The path to the UFF file to be written.</p>\n</li>\n<li><p><code>data::Vector&#123;UFFDataset&#125;</code>: A vector containing the UFF datasets to be</p>\n</li>\n</ul>\n<p>written.</p>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\nwriteuff(filename::String, data::Vector{UFFDataset})\n\\end{verbatim}\nWrites a vector of UFFDataset objects to a UFF file.\n\n\\textbf{Input}\n\n\\begin{itemize}\n\\item \\texttt{filename::String}: The path to the UFF file to be written.\n\n\n\\item \\texttt{data::Vector\\{UFFDataset\\}}: A vector containing the UFF datasets to be\n\n\\end{itemize}\nwritten.\n\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "7",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::"
             ]
         }
     ],
-    "timestamp": "2025-10-31T14:33:04.768",
+    "timestamp": "2025-11-03T10:57:46.7",
     "file": "/Users/maucejo/Documents/01_Recherche/04_Projets/Codes/Julia/UFFFiles/docs/usage/index.qmd",
     "qnr_schema_version": "1.0.0"
 }

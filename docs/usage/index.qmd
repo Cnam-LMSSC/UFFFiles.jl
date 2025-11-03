@@ -16,7 +16,11 @@ execute:
 using UFFFiles
 ```
 
-At the moment, `UFFFiles.jl` only implements reading functionalities through the function `readuff`. Future versions will include additional functionalities for writing UFF data in a given format.
+`UFFFiles.jl` implements reading and writing functionalities through the functions `readuff` and `writeuff`.
+
+::: {.callout-note}
+`UFFDataset` is an abstract type representing a generic UFF dataset. Each specific UFF dataset type (e.g., `Dataset15`, `Dataset58`, etc.) is a concrete subtype of `UFFDataset`.
+:::
 
 ## Reading UFF Files
 
@@ -44,3 +48,16 @@ d15 = data[1]
 # Access to the list of node coordinates
 node_coords = d15.coords
 ```
+
+## Writing UFF Files
+
+```julia
+writeuff("path/to/your/file.uff", data)
+```
+
+::: {.api}
+```{julia}
+#| echo: false
+@doc writeuff
+```
+:::

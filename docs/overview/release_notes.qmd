@@ -6,6 +6,10 @@ format:
     number-sections: false
 ---
 
+## v0.2.0
+
+- Implementation of writing functionality for all the datasets in the package.
+
 ## v0.1.0
 
 - Initial release of the package

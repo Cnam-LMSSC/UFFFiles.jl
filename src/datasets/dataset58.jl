@@ -737,7 +737,7 @@ function parse_dataset58(block)
     # Record 7
     r7 = split(block[8])
     ord_dtype, num_pts, abs_spacing_type = parse.(Int, strip.(r7[1:3]))
-    abs_start, abs_increment, zval = parse.(Float64, strip.(r7[4:6]))
+    abs_min, abs_increment, zval = parse.(Float64, strip.(r7[4:6]))
 
     # Record 8
     r8 = split(block[9])
@@ -810,7 +810,7 @@ function parse_dataset58(block)
         ord_dtype,
         num_pts,
         abs_spacing_type,
-        abs_start,
+        abs_min,
         abs_increment,
         zval,
         abs_spec_dtype,
@@ -878,7 +878,7 @@ function write_dataset58(dataset::Dataset58)
         dataset.ord_dtype,
         dataset.num_pts,
         dataset.abs_spacing_type,
-        dataset.abs_start,
+        dataset.abs_min,
         dataset.abs_increment,
         dataset.zval)
     push!(lines, r7_line)
@@ -989,6 +989,7 @@ function write_dataset58(dataset::Dataset58)
             push!(lines, line)
         end
     end
+
     # End marker
     push!(lines, "    -1")
 
