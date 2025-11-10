@@ -14,6 +14,8 @@ format:
 
 - Remove `parse_dataset` function in favor of `getfield(UFFFiles, Symbol("parse_dataset", dtype))` calls in `read_uff` function. Thanks to [@JakeZw](https://github.com/Spectrum-Tec)
 
+- Modify `parse_dataset58` to handle lines without spacing between values.
+
 - Use multiple dispatch to write dataset blocks in a more modular way.
 
 ## v0.2.0
