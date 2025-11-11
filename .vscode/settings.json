@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/docs/_site/about.html"
+    "livePreview.defaultPreviewPath": "/docs/_site/about.html",
+    "julia.environmentPath": "c:\\Users\\jakez\\.julia\\dev\\UFFFiles"
 }

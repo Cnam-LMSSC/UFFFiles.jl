@@ -13,19 +13,23 @@ A struct containing UFF Dataset 164 (Units) data.
 """
 @show_data struct Dataset164 <: UFFDataset
     # Fields specific to Dataset164
-    type::Symbol                        # Data set type
-    name::String                        # Data set name
-    units::Int                          # Record 1 - field 1
-    description::String                 # Record 1 - field 2
-    temperature_mode::Int               # Record 1 - field 3
-    conversion_factor::Vector{Float64}  # Record 2 - fields 1 to 4
+    type::Symbol                            # Data set type
+    name::String                            # Data set name
+    units::Int                              # Record 1 - field 1
+    description::String                     # Record 1 - field 2
+    temperature_mode::Int                   # Record 1 - field 3
+    conversion_length::Float64              # Record 2 - fields 1
+    conversion_force::Float64               # Record 2 - fields 2
+    conversion_temperature::Float64         # Record 2 - fields 3
+    conversion_temperature_offset::Float64  # Record 2 - fields  4
 
     Dataset164(
         units = 1,
         description = "",
         temperature_mode = 0,
         conversion_factor = [1., 1., 1., 0.]
-    ) = new(:Dataset164, "Units",units, description, temperature_mode, conversion_factor)
+    ) = new(:Dataset164, "Units",units, description, temperature_mode, conversion_length, 
+        conversion_force, conversion_temperature, conversion_temperature_offset)
 end
 
 """
@@ -65,15 +69,17 @@ function parse_dataset164(block)
     description = strip(record1[2:29])
     temperature_mode = parse(Int, strip(record1[31:end]))
 
-    conversion_factor = zeros(Float64, 4)
-    conversion_factor[1:3] .= parse.(Float64, split(block[3]))
-    conversion_factor[4] = parse(Float64, strip(block[4]))
+    (conversion_length, conversion_force, conversion_temperature) .= parse.(Float64, split(replace(block[3], "D" => "E")))
+    conversion_temperature_offset = parse(Float64, strip(replace(block[4], "D" => "E")))
 
     return Dataset164(
         units,
         description,
         temperature_mode,
-        conversion_factor
+        conversion_length,
+        conversion_force,
+        conversion_temperature,
+        conversion_temperature_offset
     )
 end
 
@@ -113,15 +119,15 @@ function write_dataset(dataset::Dataset164)
     # Write Record 2: FORMAT(3D25.17)
     # First line: 3 conversion factors (length, force, temperature)
     line2 = @sprintf("%25.17E%25.17E%25.17E",
-        dataset.conversion_factor[1],
-        dataset.conversion_factor[2],
-        dataset.conversion_factor[3]
+        dataset.conversion_length,
+        dataset.conversion_force,
+        dataset.conversion_temperature
     )
     push!(lines, line2)
 
     # Second line: temperature offset
     line3 = @sprintf("%25.17E",
-        dataset.conversion_factor[4]
+        dataset.conversion_temperature_offset
     )
     push!(lines, line3)
 
