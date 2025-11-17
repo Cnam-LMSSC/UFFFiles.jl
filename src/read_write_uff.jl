@@ -26,7 +26,14 @@ function readuff(filename::String)
     i = 1
     for (b, block) in enumerate(blocks)
         # Determine dataset type from the first line of the block
-        dtype = strip(block[1])
+        data_block = strip(block[1])
+        if length(data_block) > 6
+            dtype = data_block[1:3]
+        else
+            dtype = data_block
+        end
+
+        # Check if the dataset type is supported
         if !supported_blocks[b]
             @warn "Unsupported dataset type: $dtype - skipping this block."
             continue
