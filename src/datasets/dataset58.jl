@@ -886,11 +886,58 @@ function parse_dataset58(io)
       _data[i] = parse(Float64, r12[34:46])
       _data[i+1] = parse(Float64, r12[47:66])
     end
+    # Consume the trailing "    -1"
+    readline(io)
 
-    _data = reshape(reinterpret(Float32, _data), (3, :))'
-    abscissa = _data[:, 1]
-    data = reinterpret(ComplexF64, reshape(_data[:, 2:3]', (:, 1)))
-
+    return Dataset58(
+        id1,
+        id2,
+        id3,
+        id4,
+        id5,
+        func_type,
+        func_id,
+        version_num,
+        load_case_id,
+        response_entity,
+        response_node,
+        response_direction,
+        reference_entity,
+        reference_node,
+        reference_direction,
+        ord_dtype,
+        num_pts,
+        abs_spacing_type,
+        abs_min,
+        abs_increment,
+        zval,
+        abs_spec_dtype,
+        abs_len_unit_exp,
+        abs_force_unit_exp,
+        abs_temp_unit_exp,
+        abs_axis_label,
+        abs_axis_unit_label,
+        ord_spec_dtype,
+        ord_len_unit_exp,
+        ord_force_unit_exp,
+        ord_temp_unit_exp,
+        ord_axis_label,
+        ord_axis_unit_label,
+        ord_denom_spec_dtype,
+        ord_denom_len_unit_exp,
+        ord_denom_force_unit_exp,
+        ord_denom_temp_unit_exp,
+        ord_denom_axis_label,
+        ord_denom_axis_unit_label,
+        z_spec_dtype,
+        z_len_unit_exp,
+        z_force_unit_exp,
+        z_temp_unit_exp,
+        z_axis_label,
+        z_axis_unit_label,
+        abscissa,
+        data
+    )
   end
 
   nd = length(data)
