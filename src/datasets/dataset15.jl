@@ -54,6 +54,18 @@ function parse_dataset15(io)
     color = Int[]
     node_coords = Vector{Float64}[]
 
+    # while  (r1 = readline(io)) != "    -1"
+    #     # Use sprintf here
+    #     nid, dcs, disp_cs, col = parse.(Int, strip.(r1[1:4]))
+    #     x, y, z = parse.(Float64, strip.(r1[5:end]))
+
+    #     push!(node_ID, nid)
+    #     push!(def_cs_num, dcs)
+    #     push!(disp_cs_num, disp_cs)
+    #     push!(color, col)
+    #     push!(coords, [x, y, z])
+    # end
+
     while  (line = readline(io)) != "    -1"
         r1 = split(line)
         nid, dcs, disp_cs, col = parse.(Int, strip.(r1[1:4]))
@@ -63,7 +75,7 @@ function parse_dataset15(io)
         push!(def_cs_num, dcs)
         push!(disp_cs_num, disp_cs)
         push!(color, col)
-        push!(coords, [x, y, z])
+        push!(node_coords, [x, y, z])
     end
 
     return Dataset15(
