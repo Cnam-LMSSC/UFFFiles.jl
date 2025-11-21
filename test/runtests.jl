@@ -46,6 +46,8 @@ ds[1].data .≈ ds1[1].data .≈ ds2[1].data
 
 
 # Test all the cases in dataset58
+readpath = "datasets"
+writepath = "written_datasets"
 filenames = glob("pump1*.unv", "datasets")
 for filename in filenames
     # println("Start $filename")

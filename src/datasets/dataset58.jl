@@ -848,8 +848,8 @@ function parse_dataset58(io)
           _data[i+j-1] = parse(Float64, r12[(j-1)*fw+1:j*fw])
         end
       end
-      abscissa = Float64[]  
-      data = reinterpret(Float64, _data)
+      abscissa = Float32[]  
+      data = reinterpret(ComplexF64, _data)
 
     elseif (ord_dtype == 6 && abs_spacing_type == 0)  # Case 8 - Complex, Double Precision, Uneven Spacing E13.5,2E20.12
       abscissa = Vector{Float32}(undef, num_pts)
@@ -975,7 +975,7 @@ function write_dataset58_data(io, dataset::Dataset58)
       end
     elseif (dataset.ord_dtype == 6 && dataset.abs_spacing_type == 1)  # Case 7 - Complex, Double Precision, Even Spacing
       # Complex double precision even: 4E20.12 (2 complex values per line)
-      y_pair_per_line = 3
+      y_pair_per_line = 2
       for i in 1:y_pair_per_line:length(dataset.data)
             ie = min(i + y_pair_per_line - 1, length(dataset.data))
             line = join([@sprintf(" %19.12E %19.12E", real(v), imag(v)) for v in dataset.data[i:ie]])
