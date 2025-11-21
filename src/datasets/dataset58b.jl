@@ -24,13 +24,13 @@ bbbb58
 ...
 bbbb-1
 
-The Binary 58 universal file format was originally developed by UC-SDRL 
+The Binary 58 universal file format was originally developed by UC-SDRL
 in order to eliminate the need to compress the UFF 58 records and to reduce
 the time required to load the UFF 58 data records.  The Binary 58 universal file
 format yields files that are comparable to compressed files (approximately 3 to
-4 times smaller than the equivalent UFF 58 file).  The Binary 58 universal file 
-format loads approximately 30 to 40 times faster than the equivalent UFF 58 
-file, depending upon the computing environment.  This new format was 
+4 times smaller than the equivalent UFF 58 file).  The Binary 58 universal file
+format loads approximately 30 to 40 times faster than the equivalent UFF 58
+file, depending upon the computing environment.  This new format was
 submitted to SDRC and subsequently adopted as a supported format.
 
 The Binary 58 universal file format uses the same ASCII records at the
@@ -95,52 +95,63 @@ The format of this line should remain constant for any other dataset
 that takes on a binary format in the future.
 """
 function parse_dataset58b(io)
-   # this function should be able to read the abscissa for uneven datasets if they are Float32 or Float64.
-    reset(io)
-    func = readline(io)
-    n, _, type, endian, floating_point_format, num_ascii_lines, binary_bytes, _... = @scanf(func, "%6i%c%6i%6i%12i%12i%6i%6i%12i%12i", 
-        Int, Char, Int, Int, Int, Int, Int, Int, Int, Int)
-    
-    # Need to implement proper error handling
-    type == 'b' || error("Expected UFF58 binary file but type is $type")
-    endian == 1 || println("Only implemented for Little Endian")
-    floating_point_format == 2 || println("Only implemented for IEEE 754")
-    num_ascii_lines == 11 || println("Header not correct")
-   
-    id1 = strip(readline(io))
-    id2 = strip(readline(io))
-    id3 = strip(readline(io))
-    id4 = strip(readline(io))
-    id5 = strip(readline(io))
+  # Binary UFF Dataset 58 Parser
+  binary = true
 
-    # Record 6
-    r6 = readline(io)
-    n, func_type, func_id, version_num, load_case_id, _, 
-        response_entity, response_node, response_direction, _, 
-        reference_entity, reference_node,  reference_direction= 
-        @scanf(r6, "%5i%10i%5i%10i%c%10c%10i%4i%c%10c%10i%4i", Int, Int, Int, Int, Char, String, Int, Int, Char, String, Int, Int)
+  # this function should be able to read the abscissa for uneven datasets if they are Float32 or Float64.
+  reset(io)
+  func = readline(io)
+  n, _, type, endian, floating_point_format, num_ascii_lines, binary_bytes, _... = @scanf(func, "%6i%c%6i%6i%12i%12i%6i%6i%12i%12i",
+      Int, Char, Int, Int, Int, Int, Int, Int, Int, Int)
 
-    # Record 7
-    r7 = (readline(io))
-    n, ord_dtype, num_pts, abs_spacing_type, abs_min, abs_increment, zval = @scanf(r7, "%10i%10i%10i%13e%13e%13e", Int, Int, Int, Float64, Float64, Float64)
+  # Need to implement proper error handling
+  type == 'b' || error("Expected UFF58 binary file but type is $type")
+  endian == 1 || println("Only implemented for Little Endian")
+  floating_point_format == 2 || println("Only implemented for IEEE 754")
+  num_ascii_lines == 11 || println("Header not correct")
 
-    # Record 8
-    r8 = (readline(io))
-    n, abs_spec_dtype, abs_len_unit_exp, abs_force_unit_exp, abs_temp_unit_exp, _, abs_axis_label, _, abs_axis_unit_label = 
-        @scanf(r8, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
+  id1 = strip(readline(io))
+  id2 = strip(readline(io))
+  id3 = strip(readline(io))
+  id4 = strip(readline(io))
+  id5 = strip(readline(io))
 
-    # Record 9
-    r9 = (readline(io))
-    n, ord_spec_dtype, ord_len_unit_exp, ord_force_unit_exp, ord_temp_unit_exp, _, ord_axis_label, _, ord_axis_unit_label = 
-        @scanf(r9, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
+  # Record 6
+  r6 = readline(io)
+  n, func_type, func_id, version_num, load_case_id, _,
+      response_entity, response_node, response_direction, _,
+      reference_entity, reference_node,  reference_direction=
+      @scanf(r6, "%5i%10i%5i%10i%c%10c%10i%4i%c%10c%10i%4i", Int, Int, Int, Int, Char, String, Int, Int, Char, String, Int, Int)
 
+  # Record 7
+  r7 = readline(io)
+  n, ord_dtype, num_pts, abs_spacing_type, abs_min, abs_increment, zval = @scanf(r7, "%10i%10i%10i%13e%13e%13e", Int, Int, Int, Float64, Float64, Float64)
+
+  # Record 8
+  r8 = readline(io)
+  n, abs_spec_dtype, abs_len_unit_exp, abs_force_unit_exp, abs_temp_unit_exp, _, abs_axis_label, _, abs_axis_unit_label =
+      @scanf(r8, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
+
+  # Record 9
+  r9 = readline(io)
+  n, ord_spec_dtype, ord_len_unit_exp, ord_force_unit_exp, ord_temp_unit_exp, _, ord_axis_label, _, ord_axis_unit_label =
+      @scanf(r9, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
+
+  # Record 10
+  r10 = readline(io)
+  n, ord_denom_spec_dtype, ord_denom_len_unit_exp, ord_denom_force_unit_exp, ord_denom_temp_unit_exp, _, ord_denom_axis_label, _, ord_denom_axis_unit_label =
+      @scanf(r10, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
     # Record 10
-    r10 = (readline(io))
+    r10 = readline(io)
     n, ord_denom_spec_dtype, ord_denom_len_unit_exp, ord_denom_force_unit_exp, ord_denom_temp_unit_exp, _, ord_denom_axis_label, _, ord_denom_axis_unit_label = 
         @scanf(r10, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
 
+  # Record 11
+  r11 = readline(io)
+  n, z_spec_dtype, z_len_unit_exp, z_force_unit_exp, z_temp_unit_exp, _, z_axis_label, _, z_axis_unit_label =
+      @scanf(r11, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
     # Record 11
-    r11 = (readline(io))
+    r11 = readline(io)
     n, z_spec_dtype, z_len_unit_exp, z_force_unit_exp, z_temp_unit_exp, _, z_axis_label, _, z_axis_unit_label = 
         @scanf(r11, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
 
@@ -204,58 +215,59 @@ function parse_dataset58b(io)
     
     readline(io) # remove trailing "    -1" from dataset
 
-    return Dataset58(
-        id1,
-        id2,
-        id3,
-        id4,
-        id5,
-        func_type,
-        func_id,
-        version_num,
-        load_case_id,
-        response_entity,
-        response_node,
-        response_direction,
-        reference_entity,
-        reference_node,
-        reference_direction,
-        ord_dtype,
-        num_pts,
-        abs_spacing_type,
-        abs_min,
-        abs_increment,
-        zval,
-        abs_spec_dtype,
-        abs_len_unit_exp,
-        abs_force_unit_exp,
-        abs_temp_unit_exp,
-        abs_axis_label,
-        abs_axis_unit_label,
-        ord_spec_dtype,
-        ord_len_unit_exp,
-        ord_force_unit_exp,
-        ord_temp_unit_exp,
-        ord_axis_label,
-        ord_axis_unit_label,
-        ord_denom_spec_dtype,
-        ord_denom_len_unit_exp,
-        ord_denom_force_unit_exp,
-        ord_denom_temp_unit_exp,
-        ord_denom_axis_label,
-        ord_denom_axis_unit_label,
-        z_spec_dtype,
-        z_len_unit_exp,
-        z_force_unit_exp,
-        z_temp_unit_exp,
-        z_axis_label,
-        z_axis_unit_label,
-        abscissa,
-        data
-    )
+  return Dataset58(
+      binary,
+      id1,
+      id2,
+      id3,
+      id4,
+      id5,
+      func_type,
+      func_id,
+      version_num,
+      load_case_id,
+      response_entity,
+      response_node,
+      response_direction,
+      reference_entity,
+      reference_node,
+      reference_direction,
+      ord_dtype,
+      num_pts,
+      abs_spacing_type,
+      abs_min,
+      abs_increment,
+      zval,
+      abs_spec_dtype,
+      abs_len_unit_exp,
+      abs_force_unit_exp,
+      abs_temp_unit_exp,
+      abs_axis_label,
+      abs_axis_unit_label,
+      ord_spec_dtype,
+      ord_len_unit_exp,
+      ord_force_unit_exp,
+      ord_temp_unit_exp,
+      ord_axis_label,
+      ord_axis_unit_label,
+      ord_denom_spec_dtype,
+      ord_denom_len_unit_exp,
+      ord_denom_force_unit_exp,
+      ord_denom_temp_unit_exp,
+      ord_denom_axis_label,
+      ord_denom_axis_unit_label,
+      z_spec_dtype,
+      z_len_unit_exp,
+      z_force_unit_exp,
+      z_temp_unit_exp,
+      z_axis_label,
+      z_axis_unit_label,
+      abscissa,
+      data
+  )
 end
 
-function write_dataset58b_data(io, dataset)    
+function write_dataset58b_data(io, dataset)
     # Record 12: Data Values
     # Format depends on ordinate data type and precision
 

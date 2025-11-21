@@ -707,41 +707,44 @@ Universal Dataset Number: 58
                        .
 """
 function parse_dataset58(io)
+  # ASCII UFF Dataset 58 Parser
+  binary = false
 
-    id1 = strip(readline(io))
-    id2 = strip(readline(io))
-    id3 = strip(readline(io))
-    id4 = strip(readline(io))
-    id5 = strip(readline(io))
+  # Record 1-5
+  id1 = strip(readline(io))
+  id2 = strip(readline(io))
+  id3 = strip(readline(io))
+  id4 = strip(readline(io))
+  id5 = strip(readline(io))
 
-    # Record 6
-    r6 = readline(io)
-    n, func_type, func_id, version_num, load_case_id, _, 
-        response_entity, response_node, response_direction, _, 
-        reference_entity, reference_node,  reference_direction= 
-        @scanf(r6, "%5i%10i%5i%10i%c%10c%10i%4i%c%10c%10i%4i", Int, Int, Int, Int, Char, String, Int, Int, Char, String, Int, Int)
+  # Record 6
+  r6 = readline(io)
+  n, func_type, func_id, version_num, load_case_id, _,
+      response_entity, response_node, response_direction, _,
+      reference_entity, reference_node,  reference_direction=
+      @scanf(r6, "%5i%10i%5i%10i%c%10c%10i%4i%c%10c%10i%4i", Int, Int, Int, Int, Char, String, Int, Int, Char, String, Int, Int)
 
-    # Record 7
-    r7 = (readline(io))
-    n, ord_dtype, num_pts, abs_spacing_type, abs_min, abs_increment, zval = @scanf(r7, "%10i%10i%10i%13e%13e%13e", Int, Int, Int, Float64, Float64, Float64)
+  # Record 7
+  r7 = readline(io)
+  n, ord_dtype, num_pts, abs_spacing_type, abs_min, abs_increment, zval = @scanf(r7, "%10i%10i%10i%13e%13e%13e", Int, Int, Int, Float64, Float64, Float64)
 
-    # Record 8
-    r8 = (readline(io))
-    n, abs_spec_dtype, abs_len_unit_exp, abs_force_unit_exp, abs_temp_unit_exp, _, abs_axis_label, _, abs_axis_unit_label = 
-        @scanf(r8, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
+  # Record 8
+  r8 = readline(io)
+  n, abs_spec_dtype, abs_len_unit_exp, abs_force_unit_exp, abs_temp_unit_exp, _, abs_axis_label, _, abs_axis_unit_label =
+      @scanf(r8, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
 
-    # Record 9
-    r9 = (readline(io))
-    n, ord_spec_dtype, ord_len_unit_exp, ord_force_unit_exp, ord_temp_unit_exp, _, ord_axis_label, _, ord_axis_unit_label = 
-        @scanf(r9, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
+  # Record 9
+  r9 = readline(io)
+  n, ord_spec_dtype, ord_len_unit_exp, ord_force_unit_exp, ord_temp_unit_exp, _, ord_axis_label, _, ord_axis_unit_label =
+      @scanf(r9, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
 
     # Record 10
-    r10 = (readline(io))
+    r10 = readline(io)
     n, ord_denom_spec_dtype, ord_denom_len_unit_exp, ord_denom_force_unit_exp, ord_denom_temp_unit_exp, _, ord_denom_axis_label, _, ord_denom_axis_unit_label = 
         @scanf(r10, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
 
     # Record 11
-    r11 = (readline(io))
+    r11 = readline(io)
     n, z_spec_dtype, z_len_unit_exp, z_force_unit_exp, z_temp_unit_exp, _, z_axis_label, _, z_axis_unit_label = 
     @scanf(r11, "%10i%5i%5i%5i%c%20c%c%20c", Int, Int, Int, Int, Char, String, Char, String)
 
@@ -864,55 +867,56 @@ function parse_dataset58(io)
     # Consume the trailing "    -1"
     readline(io)
 
-    return Dataset58(
-        id1,
-        id2,
-        id3,
-        id4,
-        id5,
-        func_type,
-        func_id,
-        version_num,
-        load_case_id,
-        response_entity,
-        response_node,
-        response_direction,
-        reference_entity,
-        reference_node,
-        reference_direction,
-        ord_dtype,
-        num_pts,
-        abs_spacing_type,
-        abs_min,
-        abs_increment,
-        zval,
-        abs_spec_dtype,
-        abs_len_unit_exp,
-        abs_force_unit_exp,
-        abs_temp_unit_exp,
-        abs_axis_label,
-        abs_axis_unit_label,
-        ord_spec_dtype,
-        ord_len_unit_exp,
-        ord_force_unit_exp,
-        ord_temp_unit_exp,
-        ord_axis_label,
-        ord_axis_unit_label,
-        ord_denom_spec_dtype,
-        ord_denom_len_unit_exp,
-        ord_denom_force_unit_exp,
-        ord_denom_temp_unit_exp,
-        ord_denom_axis_label,
-        ord_denom_axis_unit_label,
-        z_spec_dtype,
-        z_len_unit_exp,
-        z_force_unit_exp,
-        z_temp_unit_exp,
-        z_axis_label,
-        z_axis_unit_label,
-        abscissa,
-        data
-    )
+  return Dataset58(
+      binary,
+      id1,
+      id2,
+      id3,
+      id4,
+      id5,
+      func_type,
+      func_id,
+      version_num,
+      load_case_id,
+      response_entity,
+      response_node,
+      response_direction,
+      reference_entity,
+      reference_node,
+      reference_direction,
+      ord_dtype,
+      num_pts,
+      abs_spacing_type,
+      abs_min,
+      abs_increment,
+      zval,
+      abs_spec_dtype,
+      abs_len_unit_exp,
+      abs_force_unit_exp,
+      abs_temp_unit_exp,
+      abs_axis_label,
+      abs_axis_unit_label,
+      ord_spec_dtype,
+      ord_len_unit_exp,
+      ord_force_unit_exp,
+      ord_temp_unit_exp,
+      ord_axis_label,
+      ord_axis_unit_label,
+      ord_denom_spec_dtype,
+      ord_denom_len_unit_exp,
+      ord_denom_force_unit_exp,
+      ord_denom_temp_unit_exp,
+      ord_denom_axis_label,
+      ord_denom_axis_unit_label,
+      z_spec_dtype,
+      z_len_unit_exp,
+      z_force_unit_exp,
+      z_temp_unit_exp,
+      z_axis_label,
+      z_axis_unit_label,
+      abscissa,
+      data
+  )
 end
 
 function write_dataset58_data(io, dataset::Dataset58)
@@ -922,6 +926,7 @@ function write_dataset58_data(io, dataset::Dataset58)
     if (dataset.ord_dtype == 2 && dataset.abs_spacing_type == 1) # Case 1 - Real, Single Precision, Even Spacing
       # FORMAT(6E13.5) 6 values per line
       y_values_per_line = 6
+      abscissa = Float32[]  
         for i in 1:y_values_per_line:length(dataset.data)
         ie = min(i + y_values_per_line - 1, length(dataset.data))
         line = join([@sprintf(" %12.5E", v) for v in dataset.data[i:ie]])

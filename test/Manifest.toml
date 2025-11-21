@@ -160,7 +160,7 @@ uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 version = "1.10.0"
 
 [[deps.UFFFiles]]
-deps = ["Dates", "FileIO", "Printf", "Scanf"]
+deps = ["Dates", "FileIO", "Printf", "Scanf", "UUIDs"]
 path = "C:\\Users\\jakez\\.julia\\dev\\UFFFiles"
 uuid = "20c5726e-8372-4c34-be2c-190a5a70d483"
 version = "0.3.0"
