@@ -193,7 +193,7 @@ function parse_dataset1858(io)
     meas_run = parse(Int, record1[25:36])
 
 
-    n, set_record_number, octave_format, meas_run, unused... = @scanf(record1, "%12i%12i%12i%12i%12i%12i", Int, Int, Int, Int, Int, Int)
+    n, set_record_number, octave_format, meas_run, _... = @scanf(record1, "%12i%12i%12i%12i%12i%12i", Int, Int, Int, Int, Int, Int)
     
     # Record 2
     record2 = (readline(io))

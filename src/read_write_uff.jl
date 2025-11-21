@@ -20,18 +20,18 @@ function readuff(filename::String)
         while !eof(io)
             line = readline(io)
             # Look for dataset delimiter
-            if line == "    -1"
+            if line[1:6] == "    -1"
                 # Determine dataset type from the following line & mark the position
                 mark(io)
                 line = readline(io)
-                #@show(line)
+                # @show(line)
                 dtype = length(line) > 6 ? strip(line[1:7]) : strip(line[1:6])
-                #@show(dtype)
+                # @show(dtype)
                 if any(dtype .== supported_datasets())
                     # Parse the block based on its dataset type
                     # https://stackoverflow.com/questions/34016768/julia-invoke-a-function-by-a-given-string/34023458#34023458
                     parse_function = getfield(UFFFiles, Symbol("parse_dataset", dtype))
-                    @show(parse_function)
+                    # @show(parse_function)
                     datatmp = parse_function(io)
                     data = push!(data, datatmp)
                 else
@@ -63,8 +63,7 @@ function writeuff(filename::String, datasets; binary=true)
     global binary_write = binary
     open(filename, "w") do io
         for dataset in datasets
-            @show(dataset, typeof(dataset))
-            #lines = 
+            # @show(dataset, typeof(dataset))
             write_dataset(io, dataset)
 
             #= Write the formatted lines to the file
