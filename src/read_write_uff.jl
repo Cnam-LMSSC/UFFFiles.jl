@@ -34,7 +34,8 @@ function readuff(filename::String)
                     data = push!(data, datatmp)
                 else
                      @warn "Unsupported dataset type: $dtype - skipping this dataset"
-                     while readline(io)[1:6] != "    -1"  # Remove the -1 from the end of this dataset
+                     while readline(io)[1:6] != "    -1"
+                        # Remove the -1 from the end of this dataset
                      end
                 end
             end

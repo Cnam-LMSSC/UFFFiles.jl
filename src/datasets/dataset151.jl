@@ -155,23 +155,7 @@ function write_dataset(io, dataset::Dataset151)
     # Record 3: FORMAT(80A1) - program which created DB
     println(io, dataset.application)
 
-    # Record 4: FORMAT(10A1,10A1,3I10) - date/time created, version, version, file_type
-    # The datetime_created field should already contain both date and time
-    # The version field should be formatted as two 10-character fields
-    # File type should be formatted as I10
-    # record4 = dataset.datetime_created
-    # the commented out lines appear to compensate for a badly formatted dataset151
-    #=if !isempty(dataset.version)
-        record4 *= dataset.datetime_created
-    end
-    if !isempty(dataset.version2)
-        record4 *= dataset.version2
-    end
-    if dataset.file_type != 0
-        record4 *= @sprintf("%10d", dataset.file_type)
-    end=#
-
-    record4 = @sprintf("%-10s%-10s%10i%10i%10i",
+    r4 = @sprintf("%-10s%-10s%10i%10i%10i",
                     split(dataset.datetime_created)[1],
                     split(dataset.datetime_created)[2],
                     dataset.version,
@@ -179,26 +163,26 @@ function write_dataset(io, dataset::Dataset151)
                     dataset.file_type
                     )
 
-    println(io, record4)
+    println(io, r4)
 
     # Record 5: FORMAT(10A1,10A1) - date/time last saved
-    record5 = @sprintf("%-10s%-10s",
+    r5 = @sprintf("%-10s%-10s",
                     split(dataset.datetime_last_saved)[1],
                     split(dataset.datetime_last_saved)[2]
                     )
 
-    println(io, record5)
+    println(io, r5)
 
     # Record 6: FORMAT(80A1) - program which created universal file
     println(io, dataset.program)
 
     # Record 7: FORMAT(10A1,10A1) - date/time written
-    record7 = @sprintf("%-10s%-10s",
+    r7 = @sprintf("%-10s%-10s",
                     Dates.format(now(), "dd-uuu-yy"),
                     Dates.format(now(), "HH:MM:SS")
                 )
 
-    println(io, record7)
+    println(io, r7)
 
     # Write footer
     println(io, "    -1")

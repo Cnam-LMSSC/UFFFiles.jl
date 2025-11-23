@@ -61,14 +61,14 @@ Universal Dataset Number: 82
                     6) Repeat Datasets for each Trace_Line
 """
 function parse_dataset82(io)
-    # Record 1
+    # Record 1 - FORMAT(3I10)
     r1 = readline(io)
-    n, line_number, num_nodes, color = @scanf(r1, "%10i%10i%10i", Int, Int, Int)
+    line_number, num_nodes, color = @scanf(r1, "%10i%10i%10i", Int, Int, Int)[2:end]
 
-    # Record 2
+    # Record 2 - FORMAT(80A1)
     id_line = strip(readline(io))
 
-    # Record 3
+    # Record 3 - FORMAT(8I10)
     line_nodes = Int[]
     while (line = readline(io)) != "    -1"
         append!(line_nodes, parse.(Int, split(line)))
@@ -104,17 +104,17 @@ function write_dataset(io, dataset::Dataset82)
     # Field 1: trace line number
     # Field 2: number of nodes
     # Field 3: color
-    line1 = @sprintf("%10d%10d%10d",
+    r1 = @sprintf("%10d%10d%10d",
         dataset.line_number,
         dataset.num_nodes,
         dataset.color
     )
-    println(io, line1)
+    println(io, r1)
 
     # Write Record 2: FORMAT(80A1)
     # Identification line (max 80 characters)
-    id_line = rpad(dataset.id_line[1:min(length(dataset.id_line), 80)], 0)
-    println(io, id_line)
+    r2 = rpad(dataset.id_line[1:min(length(dataset.id_line), 80)], 0)
+    println(io, r2)
 
     # Write Record 3: FORMAT(8I10)
     # Node numbers, 8 per line
