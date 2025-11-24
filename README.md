@@ -42,6 +42,7 @@ Currently, `UFFFiles.jl` supports reading and writing UFF files with the followi
 - Dataset 82
 - Dataset 151
 - Dataset 164
+- Dataset 1858
 - Dataset 2411
 - Dataset 2412
 - Dataset 2414
