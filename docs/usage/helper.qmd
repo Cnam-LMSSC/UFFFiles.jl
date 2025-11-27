@@ -32,11 +32,11 @@ using UFFFiles
 
 # Only one dataset is read
 data = readuff("path/to/your/file.uff")[1]
-dtype = dataset_types(data)
+dtype = dataset_type(data)
 
 # Several datasets are read
 data_all = readuff("path/to/your/file.uff")
-dtypes = dataset_types.(data_all)
+dtypes = dataset_type.(data_all)
 ```
 
 ## Supported Datasets
