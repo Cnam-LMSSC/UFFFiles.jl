@@ -98,14 +98,19 @@ function parse_dataset58b(io)
     # this function should be able to read the abscissa for uneven datasets if they are Float32 or Float64.
     reset(io)
     func = readline(io)
-    type, endian, floating_point_format, num_ascii_lines, binary_bytes, _... = @scanf(func, "%6i%c%6i%6i%12i%12i%6i%6i%12i%12i",
-        Int, Char, Int, Int, Int, Int, Int, Int, Int, Int)[3:end]
+    type, endian, floating_point_format, num_ascii_lines, binary_bytes = @scanf(func, "%6i%c%6i%6i%12i%12i%6i%6i%12i%12i",
+        Int, Char, Int, Int, Int, Int, Int, Int, Int, Int)[3:7]
 
-    # Need to implement proper error handling
-    type == 'b' || throw(ArgumentError("Expected UFF58 binary file but type is $type"))
-    endian == 1 || throw(ArgumentError("Only implemented for Little Endian"))
-    floating_point_format == 2 || throw(ArgumentError("Only implemented for Little Endian"))
-    num_ascii_lines == 11 || throw(ArgumentError("Header not correct number of lines"))
+    # Check for binary UFF58
+    type != 'b' ? throw(ArgumentError("Expected UFF58 binary file but type is $type")) : nothing
+
+    # Check endianness and floating point format
+    endian != 1  ? throw(ArgumentError("Only implemented for Little Endian")) : nothing
+
+    floating_point_format != 2 ? throw(ArgumentError("Only implemented for Little Endian")) : nothing
+
+    # Check number of ASCII lines
+    num_ascii_lines != 11 ? throw(ArgumentError("Header not correct number of lines")) : nothing
 
     id1 = strip(readline(io))
     id2 = strip(readline(io))
@@ -217,7 +222,8 @@ function parse_dataset58b(io)
         end
     end
 
-    readline(io) # remove trailing "    -1" from dataset
+    # Consume trailing "    -1"
+    readline(io)
 
     return Dataset58(
         id1,
