@@ -6,6 +6,12 @@ format:
     number-sections: false
 ---
 
+## v1.0.2
+
+- Improve internals implementation to deal with files that have inconsistent line header.
+
+- Implementation of tests to check for correct reading and writing of the supported datasets.
+
 ## v1.0.1
 
 - Minor changes to the internals to avoid errors when reading files.

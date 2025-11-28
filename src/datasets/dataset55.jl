@@ -440,17 +440,14 @@ function parse_dataset55(io)
      # Parse Record 6 - Format (6I10)
      r6 = readline(io)
      model_type, analysis_type, data_charac, spec_dtype, dtype, ndv_per_node = @scanf(r6, "%10d%10d%10d%10d%10d%10d", Int, Int, Int, Int, Int, Int)[2:end]
-     # model_type, analysis_type, data_charac, spec_dtype, dtype, ndv_per_node = parse.(Int, split(strip(readline(io))))
 
      # Record 7 - Format (8I10)
      r7 = readline(io)
      r7_raw = @scanf(r7, "%10d%10d%10d%10d%10d%10d%10d%10d", Int, Int, Int, Int, Int, Int, Int, Int)[2:end]
-     # r7_raw = parse.(Int, split(strip(readline(io))))
 
      # Record 8 - Format (6E13.5)
      r8 = readline(io)
      r8_raw = @scanf(r8, "%13e%13e%13e%13e%13e%13e", Float64, Float64, Float64, Float64, Float64, Float64)[2:end]
-     # r8_raw = parse.(Float64, split(strip(readline(io))))
 
      # Record 9 and 10
      node_number = Int[]
@@ -471,7 +468,6 @@ function parse_dataset55(io)
           nv = 0
           while nv < ndv
                r10 = @scanf(record10, "%13e%13e%13e%13e%13e%13e", Float64, Float64, Float64, Float64, Float64, Float64)[2:end]
-               # r10 = parse.(Float64, split(strip(record10)))
                nv += length(r10)
 
                if dtype == 2

@@ -139,14 +139,15 @@ function dataset58_to_mat(dataset)
     # Convert Dataset58 to Matrix
     ndatasets = length(dataset)
     nx = length(dataset[1].data)
+    ord_dtype = dataset[1].ord_dtype
 
-    xtype, dtype = if dataset[1].ord_dtype == 2
+    xtype, dtype = if ord_dtype == 2
             Float32, Float32
-    elseif dataset[1].ord_dtype == 4
+    elseif ord_dtype == 4
             Float64, Float64
-    elseif dataset[1].ord_dtype == 5
+    elseif ord_dtype == 5
             Float32, ComplexF32
-    elseif dataset[1].ord_dtype == 6
+    elseif ord_dtype == 6
             Float64, ComplexF64
     end
 

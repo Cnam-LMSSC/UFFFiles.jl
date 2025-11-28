@@ -84,7 +84,6 @@ function parse_dataset18(io)
     while  (line = rstrip(readline(io))) != "    -1"
         # Record 1 - FORMAT(5I10)
         csn, cst, ref_csn, col, md = @scanf(line, "%10d%10d%10d%10d%10d", Int, Int, Int, Int, Int)[2:end]
-        # csn, cst, ref_csn, col, md = parse.(Int, split(line))
         push!(cs_num, csn)
         push!(cs_type, cst)
         push!(ref_cs_num, ref_csn)

@@ -1,6 +1,5 @@
 using UFFFiles
 using Test
-# using FileCmp
 using Glob
 
 cd(@__DIR__)
@@ -271,10 +270,10 @@ end
 
 # Dataset2414
 @testset "dataset2414" begin
+        ntd(t) = Dict(zip(keys(t), values(t)))
         filenames = glob("dataset2414*.unv", readpath)
         for filename in filenames
             filename = splitpath(filename)[end]
-            #filename = "dataset2414_elt.unv"
             ds = readuff(joinpath(readpath, filename))
             writeuff(joinpath(writepath, filename), ds)
             ds1 = readuff(joinpath(writepath, filename))
@@ -294,12 +293,10 @@ end
             @test ds[1].result_type == ds1[1].result_type
             @test ds[1].dtype == ds1[1].dtype
             @test ds[1].num_data_values == ds1[1].num_data_values
-
-            # To Do: implement these test properly
-            #ds[1].int_analysis_type_raw ≈ ds1[1].int_analysis_type_raw
-            #ds[1].real_analysis_type_raw ≈ ds1[1].real_analysis_type_raw
-            #ds[1].data_info_raw ≈ ds1[1].data_info_raw
-            #ds[1].data_value_raw ≈ ds1[1].data_value_raw
+            @test ntd(ds[1].int_analysis_type) == ntd(ds1[1].int_analysis_type)
+            @test ntd(ds[1].real_analysis_type) == ntd(ds1[1].real_analysis_type)
+            @test ntd(ds[1].data_info) == ntd(ds1[1].data_info)
+            @test ntd(ds[1].data_value) == ntd(ds1[1].data_value)
         end
 end
 
