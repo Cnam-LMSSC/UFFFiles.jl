@@ -74,13 +74,13 @@ function convert_to_si!(ds::Dataset58, conversion_length = 1., conversion_force 
 
     # Ordinate Denominator
     if any(ds.ord_denom_spec_dtype .== (0, 1))
-        factor /= 1.
+        factor *= 1.
     elseif any(ds.ord_denom_spec_dtype .== (8, 11, 12))
-        factor /= conversion_length
+        factor *= conversion_length
     elseif any(ds.ord_denom_spec_dtype .== (9, 13))
-        factor /= conversion_force
+        factor *= conversion_force
     elseif any(ds.ord_denom_spec_dtype .== (15))
-        factor /= (conversion_force/conversion_length^2)
+        factor *= (conversion_force/conversion_length^2)
     else
         @warn "Conversion factor for $(ds.ord_denom_spec_dtype) not implemented, please submit PR"
     end
@@ -93,12 +93,23 @@ function convert_to_si!(ds::Dataset164, conversion_length = 1., conversion_force
     return nothing
 end
 
+function convert_to_si!(ds::Dataset1858, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
+
+    return nothing
+end
+
 function convert_to_si!(ds::Dataset2411, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
 
-    ds.node_coords .*= conversion_length
+    ds.node_coords ./= conversion_length
 end
 
 function convert_to_si!(ds::Dataset2412, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
 
+    return nothing
+end
+
+function convert_to_si!(ds::Dataset2414, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
+
+    # To Do
     return nothing
 end
