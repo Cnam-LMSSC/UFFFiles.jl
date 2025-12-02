@@ -1,4 +1,5 @@
 """
+    convert_to_si!(ds)
     convert_to_si!(ds, ds164)
     convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
 
@@ -15,11 +16,33 @@ Converts the units of the given UFF dataset `ds` to SI units in place.
 **Output**
 - `ds`: Dataset with its data converted to SI units.
 """
-function convert_to_si!(datasets)
+function convert_to_si!(datasets::Vector{UFFDataset})
+    # This function uses the dataset164 in the vector of datasets to 
+    # perform the conversion, with a default of SI until the first 
+    # dataset164 is read
     ds164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15)
     for ds in datasets
-        ds164 = convert_to_si!(ds, ds164)
+        if string(ds.type) in supported_file_extensions()
+            ds164 = convert_to_si!(ds, ds164)
+        else
+            @warn "File type $(ds.type) not support for unit conversions"
+        end
     end
+    return nothing
+end
+
+function convert_to_si!(datasets::Vector{UFFDataset}, ds164::Dataset164)
+    # This function uses the ds164 as the 2nd argument to 
+    # perform the conversion, regardless of the dataset164's that are in
+    # the vector of datasets
+    for ds in datasets
+        if string(ds.type) in supported_file_extensions()
+            _ = convert_to_si!(ds, ds164)
+        else
+            @warn "File type $(ds.type) not support for unit conversions"
+        end
+    end
+    return nothing
 end
 
 function convert_to_si!(ds::Dataset15, ds164)
