@@ -71,12 +71,16 @@ Universal Dataset Number: 164
 function parse_dataset164(io)
     # Record 1: FORMAT(I10,20A1,I10)
     r1 = readline(io)
-    units, description, temperature_mode = @scanf(r1, "%10d%20s%10d", Int, String, Int)[2:end]
+    units, description, temperature_mode = @scanf(r1, "%10d%20c%10d", Int, String, Int)[2:end]
 
     # Record 2: FORMAT(3D25.17)
-    conversion_length, conversion_force, conversion_temperature = @scanf(readline(io), "%25e%25e%25e", Float64, Float64, Float64)[2:end]
-
-    conversion_temperature_offset = @scanf(readline(io), "%25e", Float64)[2]
+    r2 = readline(io)
+    r2 = replace(r2, 'D' => 'E')
+    conversion_length, conversion_force, conversion_temperature = @scanf(r2, "%25e%25e%25e", Float64, Float64, Float64)[2:end]
+    
+    r3 = readline(io)
+    r3 = replace(r3, 'D' => 'E')
+    conversion_temperature_offset = @scanf(r3, "%25e", Float64)[2]
 
     # Read trailing "    -1"
     readline(io)

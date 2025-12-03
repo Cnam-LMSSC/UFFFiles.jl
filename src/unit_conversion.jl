@@ -22,7 +22,7 @@ function convert_to_si!(datasets::Vector{UFFDataset})
     # dataset164 is read
     ds164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15)
     for ds in datasets
-        if string(ds.type) in supported_file_extensions()
+        if replace(string(:Dataset58), "Dataset" => "") in supported_datasets()
             ds164 = convert_to_si!(ds, ds164)
         else
             @warn "File type $(ds.type) not support for unit conversions"
@@ -36,7 +36,7 @@ function convert_to_si!(datasets::Vector{UFFDataset}, ds164::Dataset164)
     # perform the conversion, regardless of the dataset164's that are in
     # the vector of datasets
     for ds in datasets
-        if string(ds.type) in supported_file_extensions()
+        if replace(string(:Dataset58), "Dataset" => "") in supported_datasets()
             _ = convert_to_si!(ds, ds164)
         else
             @warn "File type $(ds.type) not support for unit conversions"
