@@ -4,18 +4,29 @@
     convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
 
 Converts the units of the given UFF dataset `ds` to SI units in place.
+Note that the mass is defined as F/a and its units will be determined by F & a
 
 **Input**
-- `ds`: A UFF dataset object that contains dimensional data to be converted.
+- `ds`: A vector of UFF datasets that contains dimensional data to be converted.
 - `ds164`: (Optional) A Dataset164 object that provides conversion factors.
 - `conversion_length`: (Optional) Conversion factor for length units.
 - `conversion_force`: (Optional) Conversion factor for force units.
 - `conversion_temperature`: (Optional) Conversion factor for temperature units.
 - `temperature_offset`: (Optional) Offset to be applied for temperature conversion.
 
+convert_to_si!(ds) reads the last encountered 164 dataset and uses its conversion factors, defaults to SI
+convert_to_si!(ds, ds164) ignores the dataset164 datasets in the vector of datasets and uses the argument ds164
+convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.) 
+            creates a ds164 and acts the same as convert_to_si!(ds, ds164)
+
 **Output**
 - `ds`: Dataset with its data converted to SI units.
 """
+function convert_to_si!(dsconvert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 273.15))
+    ds164 = Dataset164(1,"User Defined", 2, conversion_length, conversion_force, conversion_temperature, temperature_offset)
+    convert_to_si!(ds, ds164)
+end
+
 function convert_to_si!(datasets::Vector{UFFDataset})
     # This function uses the dataset164 in the vector of datasets to 
     # perform the conversion, with a default of SI until the first 
@@ -67,6 +78,29 @@ end
 
 function convert_to_si!(ds::Dataset151, ds164)
 
+    return ds164
+end
+
+function convert_to_si!(ds::Dataset55, ds164)
+
+    # Convert data vector
+    # Implemented for  data types 8, 11, 12, 9, 13, 15
+
+    factor = 1.
+    # Data Type
+    if any(ds.spec_dtype .== (0, 1))
+        factor /= 1.
+    elseif any(ds.spec_dtype .== (8, 11, 12))
+        factor /= ds164.conversion_length
+    elseif any(ds.spec_dtype .== (4, 9))
+        factor /= ds164.conversion_force
+    elseif any(ds.spec_dtype .== (2, 15))
+        factor /= (ds164.conversion_force/ds164.conversion_length^2)
+    else
+        @warn "Conversion factor for $(ds.spec_dtype) not implemented, please submit PR"
+    end
+
+    ds.data .*= factor
     return ds164
 end
 

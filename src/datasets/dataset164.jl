@@ -72,6 +72,7 @@ function parse_dataset164(io)
     # Record 1: FORMAT(I10,20A1,I10)
     r1 = readline(io)
     units, description, temperature_mode = @scanf(r1, "%10d%20c%10d", Int, String, Int)[2:end]
+    description = strip(description)
 
     # Record 2: FORMAT(3D25.17)
     r2 = readline(io)
