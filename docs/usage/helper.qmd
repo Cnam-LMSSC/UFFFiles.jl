@@ -6,8 +6,8 @@ format:
     number-sections: true
 engine: julia
 execute:
-  freeze: false
-  cache: false
+  freeze: auto
+  cache: true
 ---
 
 ```{julia}
@@ -102,6 +102,32 @@ using UFFFiles
 # readuff returns a vector of datasets
 data2412 = readuff("path/to/your/file2412.uff")[1]
 connectivity = connectivity_matrix(data2412)
+```
+
+## Convert to SI units
+
+::: {.api}
+```{julia}
+# | echo: false
+@doc convert_to_si!
+```
+:::
+
+```julia
+using UFFFiles
+
+# readuff returns a vector of datasets
+datasets = readuff("path/to/your/file.uff")
+
+# Convert all datasets to SI units - This assumes that a Dataset164 is present in the file. Otherwise, default SI conversion factors will be used.
+convert_to_si!(datasets)
+
+# Convert all datasets to SI units using a specific Dataset164 - Useful when no Dataset164 is present in the file
+ds164 = Dataset164(9, "User Defined", 2, 0.3048, 4.44822, 1., 273.15)  # Example conversion factors
+convert_to_si!(datasets, ds164)
+
+# Convert all datasets to SI units using broadcasting - Useful to convert only a subset of datasets
+convert_to_si!.(datasets, Ref(ds164))
 ```
 
 ## Dataset 55 to matrix

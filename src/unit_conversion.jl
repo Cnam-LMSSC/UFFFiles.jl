@@ -1,23 +1,19 @@
 """
     convert_to_si!(ds)
     convert_to_si!(ds, ds164)
-    convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
 
 Converts the units of the given UFF dataset `ds` to SI units in place.
 Note that the mass is defined as F/a and its units will be determined by F & a
 
 **Input**
 - `ds`: A vector of UFF datasets that contains dimensional data to be converted.
-- `ds164`: (Optional) A Dataset164 object that provides conversion factors.
-- `conversion_length`: (Optional) Conversion factor for length units.
-- `conversion_force`: (Optional) Conversion factor for force units.
-- `conversion_temperature`: (Optional) Conversion factor for temperature units.
-- `temperature_offset`: (Optional) Offset to be applied for temperature conversion.
+- `ds164`: A Dataset164 object that provides conversion factors (default: Dataset164() with SI units).
 
-convert_to_si!(ds) reads the last encountered 164 dataset and uses its conversion factors, defaults to SI
-convert_to_si!(ds, ds164) ignores the dataset164 datasets in the vector of datasets and uses the argument ds164
-convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
-            creates a ds164 and acts the same as convert_to_si!(ds, ds164)
+**Notes**
+
+convert_to_si!(ds) reads the last encountered 164 dataset and uses its conversion factors for converting subsequent datasets.
+
+convert_to_si!(ds, ds164) provides the conversion factors directly. Worth to use when `ds` does not contain a `Dataset164` or when using broadcasting.
 
 **Output**
 - `ds`: Dataset with its data converted to SI units.
@@ -32,11 +28,11 @@ function convert_to_si!(datasets::Vector{UFFDataset}, ds164::Dataset164 = Datase
     end
 end
 
-function convert_to_si!(ds::Dataset15, ds164::Dataset164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15))
+function convert_to_si!(ds::Dataset15, ds164::Dataset164)
     ds.node_coords ./= ds164.conversion_length
 end
 
-function convert_to_si!(ds::Dataset18, ds164::Dataset164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15))
+function convert_to_si!(ds::Dataset18, ds164::Dataset164)
     ds.cs_origin ./= ds164.conversion_length
     ds.cs_x ./= ds164.conversion_length
     ds.cs_xz ./= ds164.conversion_length
@@ -110,7 +106,11 @@ function convert_to_si!(ds::Dataset58, ds164::Dataset164)
 end
 
 function convert_to_si!(ds::Dataset164, ds164::Dataset164)
-    @warn "A Dataset164 was encountered during unit conversion. Overriding its values with the provided Dataset164."
+    if ds === ds164
+        return
+    end
+
+    @warn "A Dataset164 was encountered during unit conversion. Overriding the current values with the new ones."
     ds164.units = ds.units
     ds164.description = ds.description
     ds164.temperature_mode = ds.temperature_mode

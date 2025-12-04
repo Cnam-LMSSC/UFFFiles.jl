@@ -1,0 +1,432 @@
+{
+    "cells": [
+        {
+            "id": "1",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                "---\n",
+                "title: Helper functions\n",
+                "format:\n",
+                "  html:\n",
+                "    toc: true\n",
+                "    number-sections: true\n",
+                "engine: julia\n",
+                "execute:\n",
+                "  freeze: auto\n",
+                "  cache: true\n",
+                "---"
+            ]
+        },
+        {
+            "id": "2",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "#| output: false\n",
+                "using UFFFiles"
+            ],
+            "outputs": [
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "3",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                "\n",
+                "`UFFFiles.jl` provides several helper functions to facilitate interaction with UFF datasets.\n",
+                "\n",
+                "## Dataset Type\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "4",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "@doc dataset_type"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36mdataset_type(data::UFFDataset)\u001b[39m\n\n  Returns the dataset type presents in a UFFDataset object.\n\n  \u001b[1mInput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mdata::UFFDataset\u001b[39m: The UFFDataset object to extract types from.\n\n  \u001b[1mOutput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mSymbol\u001b[39m: A vector containing the dataset types.",
+                        "text/markdown": "```julia\ndataset_type(data::UFFDataset)\n```\n\nReturns the dataset type presents in a UFFDataset object.\n\n**Input**\n\n  * `data::UFFDataset`: The UFFDataset object to extract types from.\n\n**Output**\n\n  * `Symbol`: A vector containing the dataset types.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">dataset_type&#40;data::UFFDataset&#41;</code></pre>\n<p>Returns the dataset type presents in a UFFDataset object.</p>\n<p><strong>Input</strong></p>\n<ul>\n<li><p><code>data::UFFDataset</code>: The UFFDataset object to extract types from.</p>\n</li>\n</ul>\n<p><strong>Output</strong></p>\n<ul>\n<li><p><code>Symbol</code>: A vector containing the dataset types.</p>\n</li>\n</ul>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\ndataset_type(data::UFFDataset)\n\\end{verbatim}\nReturns the dataset type presents in a UFFDataset object.\n\n\\textbf{Input}\n\n\\begin{itemize}\n\\item \\texttt{data::UFFDataset}: The UFFDataset object to extract types from.\n\n\\end{itemize}\n\\textbf{Output}\n\n\\begin{itemize}\n\\item \\texttt{Symbol}: A vector containing the dataset types.\n\n\\end{itemize}\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "5",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "# Only one dataset is read\n",
+                "data = readuff(\"path/to/your/file.uff\")[1]\n",
+                "dtype = dataset_type(data)\n",
+                "\n",
+                "# Several datasets are read\n",
+                "data_all = readuff(\"path/to/your/file.uff\")\n",
+                "dtypes = dataset_type.(data_all)\n",
+                "```\n",
+                "\n",
+                "## Supported Datasets\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "6",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "@doc supported_datasets"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36msupported_datasets()\u001b[39m\n\n  Returns a vector of supported UFF dataset types.",
+                        "text/markdown": "```julia\nsupported_datasets()\n```\n\nReturns a vector of supported UFF dataset types.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">supported_datasets&#40;&#41;</code></pre>\n<p>Returns a vector of supported UFF dataset types.</p>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\nsupported_datasets()\n\\end{verbatim}\nReturns a vector of supported UFF dataset types.\n\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "7",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "valid_datasets = supported_datasets()\n",
+                "```\n",
+                "\n",
+                "## Supported file extensions\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "8",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "@doc supported_file_extensions"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36msupported_file_extensions()\u001b[39m\n\n  Returns a vector of supported UFF file extensions.",
+                        "text/markdown": "```julia\nsupported_file_extensions()\n```\n\nReturns a vector of supported UFF file extensions.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">supported_file_extensions&#40;&#41;</code></pre>\n<p>Returns a vector of supported UFF file extensions.</p>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\nsupported_file_extensions()\n\\end{verbatim}\nReturns a vector of supported UFF file extensions.\n\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "9",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "valid_file_extensions = supported_file_extensions()\n",
+                "```\n",
+                "\n",
+                "## SRDC Documentation\n",
+                "\n",
+                "This function provides an easy access to the documentation for Universal File datasets that were originally developed by the Structural Dynamics Research Corporation (SDRC) in the late 1960s and early 1970s.\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "10",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "@doc srdc_doc"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36msrdc_doc(data::UFFDataset)\u001b[39m\n\n  Displays the documentation developed by the SRDC (Structural Dynamics\n  Research Corporation) for a given dataset type.\n\n  \u001b[1mInput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mdata::UFFDataset\u001b[39m: An instance of a UFF dataset type (e.g.,\n       Dataset15, Dataset18, etc.).\n\n  \u001b[1mOutput\u001b[22m\n\n    \u001b[34m• \u001b[39m Displays the documentation for the SRDC of the specified dataset\n       type.",
+                        "text/markdown": "```julia\nsrdc_doc(data::UFFDataset)\n```\n\nDisplays the documentation developed by the SRDC (Structural Dynamics Research Corporation) for a given dataset type.\n\n**Input**\n\n  * `data::UFFDataset`: An instance of a UFF dataset type (e.g., Dataset15, Dataset18, etc.).\n\n**Output**\n\n  * Displays the documentation for the SRDC of the specified dataset type.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">srdc_doc&#40;data::UFFDataset&#41;</code></pre>\n<p>Displays the documentation developed by the SRDC &#40;Structural Dynamics Research Corporation&#41; for a given dataset type.</p>\n<p><strong>Input</strong></p>\n<ul>\n<li><p><code>data::UFFDataset</code>: An instance of a UFF dataset type &#40;e.g., Dataset15, Dataset18, etc.&#41;.</p>\n</li>\n</ul>\n<p><strong>Output</strong></p>\n<ul>\n<li><p>Displays the documentation for the SRDC of the specified dataset type.</p>\n</li>\n</ul>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\nsrdc_doc(data::UFFDataset)\n\\end{verbatim}\nDisplays the documentation developed by the SRDC (Structural Dynamics Research Corporation) for a given dataset type.\n\n\\textbf{Input}\n\n\\begin{itemize}\n\\item \\texttt{data::UFFDataset}: An instance of a UFF dataset type (e.g., Dataset15, Dataset18, etc.).\n\n\\end{itemize}\n\\textbf{Output}\n\n\\begin{itemize}\n\\item Displays the documentation for the SRDC of the specified dataset type.\n\n\\end{itemize}\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "11",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "# Get the documentation for Dataset 15\n",
+                "srdc_doc(Dataser15())\n",
+                "```\n",
+                "\n",
+                "## Connectivity Matrix\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "12",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "#| echo: false\n",
+                "@doc connectivity_matrix"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36mconnectivity_matrix(dataset::Dataset2412)\u001b[39m\n\n  Returns the connectivity matrix for a Dataset2412 object, where each row\n  corresponds to an element and each column corresponds to a node. Missing\n  values are filled with \u001b[36m-1\u001b[39m.\n\n  \u001b[1mInput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mdataset::Dataset2412\u001b[39m: The Dataset2412 object to extract\n       connectivity from.\n\n  \u001b[1mOutput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mMatrix{Int}\u001b[39m: A matrix representing the connectivity of elements to\n       nodes.",
+                        "text/markdown": "```julia\nconnectivity_matrix(dataset::Dataset2412)\n```\n\nReturns the connectivity matrix for a Dataset2412 object, where each row corresponds to an element and each column corresponds to a node. Missing values are filled with `-1`.\n\n**Input**\n\n  * `dataset::Dataset2412`: The Dataset2412 object to extract connectivity from.\n\n**Output**\n\n  * `Matrix{Int}`: A matrix representing the connectivity of elements to nodes.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">connectivity_matrix&#40;dataset::Dataset2412&#41;</code></pre>\n<p>Returns the connectivity matrix for a Dataset2412 object, where each row corresponds to an element and each column corresponds to a node. Missing values are filled with <code>-1</code>.</p>\n<p><strong>Input</strong></p>\n<ul>\n<li><p><code>dataset::Dataset2412</code>: The Dataset2412 object to extract connectivity from.</p>\n</li>\n</ul>\n<p><strong>Output</strong></p>\n<ul>\n<li><p><code>Matrix&#123;Int&#125;</code>: A matrix representing the connectivity of elements to nodes.</p>\n</li>\n</ul>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\nconnectivity_matrix(dataset::Dataset2412)\n\\end{verbatim}\nReturns the connectivity matrix for a Dataset2412 object, where each row corresponds to an element and each column corresponds to a node. Missing values are filled with \\texttt{-1}.\n\n\\textbf{Input}\n\n\\begin{itemize}\n\\item \\texttt{dataset::Dataset2412}: The Dataset2412 object to extract connectivity from.\n\n\\end{itemize}\n\\textbf{Output}\n\n\\begin{itemize}\n\\item \\texttt{Matrix\\{Int\\}}: A matrix representing the connectivity of elements to nodes.\n\n\\end{itemize}\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "13",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "# readuff returns a vector of datasets\n",
+                "data2412 = readuff(\"path/to/your/file2412.uff\")[1]\n",
+                "connectivity = connectivity_matrix(data2412)\n",
+                "```\n",
+                "\n",
+                "## Convert to SI units\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "14",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "# | echo: false\n",
+                "@doc convert_to_si!"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  \u001b[36mconvert_to_si!(ds)\u001b[39m\n  \u001b[36mconvert_to_si!(ds, ds164)\u001b[39m\n\n  Converts the units of the given UFF dataset \u001b[36mds\u001b[39m to SI units in place. Note\n  that the mass is defined as F/a and its units will be determined by F & a\n\n  \u001b[1mInput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mds\u001b[39m: A vector of UFF datasets that contains dimensional data to be\n       converted.\n    \u001b[34m• \u001b[39m \u001b[36mds164\u001b[39m: A Dataset164 object that provides conversion factors\n       (default: Dataset164() with SI units).\n\n  \u001b[1mNotes\u001b[22m\n\n  convert\u001b[3mto\u001b[23msi!(ds) reads the last encountered 164 dataset and uses its\n  conversion factors for converting subsequent datasets.\n\n  convert\u001b[3mto\u001b[23msi!(ds, ds164) provides the conversion factors directly. Worth to\n  use when \u001b[36mds\u001b[39m does not contain a \u001b[36mDataset164\u001b[39m or when using broadcasting.\n\n  \u001b[1mOutput\u001b[22m\n\n    \u001b[34m• \u001b[39m \u001b[36mds\u001b[39m: Dataset with its data converted to SI units.",
+                        "text/markdown": "```julia\nconvert_to_si!(ds)\nconvert_to_si!(ds, ds164)\n```\n\nConverts the units of the given UFF dataset `ds` to SI units in place. Note that the mass is defined as F/a and its units will be determined by F & a\n\n**Input**\n\n  * `ds`: A vector of UFF datasets that contains dimensional data to be converted.\n  * `ds164`: A Dataset164 object that provides conversion factors (default: Dataset164() with SI units).\n\n**Notes**\n\nconvert*to*si!(ds) reads the last encountered 164 dataset and uses its conversion factors for converting subsequent datasets.\n\nconvert*to*si!(ds, ds164) provides the conversion factors directly. Worth to use when `ds` does not contain a `Dataset164` or when using broadcasting.\n\n**Output**\n\n  * `ds`: Dataset with its data converted to SI units.\n",
+                        "text/html": "<div class=\"markdown\"><pre><code class=\"language-julia\">convert_to_si&#33;&#40;ds&#41;\nconvert_to_si&#33;&#40;ds, ds164&#41;</code></pre>\n<p>Converts the units of the given UFF dataset <code>ds</code> to SI units in place. Note that the mass is defined as F/a and its units will be determined by F &amp; a</p>\n<p><strong>Input</strong></p>\n<ul>\n<li><p><code>ds</code>: A vector of UFF datasets that contains dimensional data to be converted.</p>\n</li>\n<li><p><code>ds164</code>: A Dataset164 object that provides conversion factors &#40;default: Dataset164&#40;&#41; with SI units&#41;.</p>\n</li>\n</ul>\n<p><strong>Notes</strong></p>\n<p>convert<em>to</em>si&#33;&#40;ds&#41; reads the last encountered 164 dataset and uses its conversion factors for converting subsequent datasets.</p>\n<p>convert<em>to</em>si&#33;&#40;ds, ds164&#41; provides the conversion factors directly. Worth to use when <code>ds</code> does not contain a <code>Dataset164</code> or when using broadcasting.</p>\n<p><strong>Output</strong></p>\n<ul>\n<li><p><code>ds</code>: Dataset with its data converted to SI units.</p>\n</li>\n</ul>\n\n\n</div>",
+                        "text/latex": "\\begin{verbatim}\nconvert_to_si!(ds)\nconvert_to_si!(ds, ds164)\n\\end{verbatim}\nConverts the units of the given UFF dataset \\texttt{ds} to SI units in place. Note that the mass is defined as F/a and its units will be determined by F \\& a\n\n\\textbf{Input}\n\n\\begin{itemize}\n\\item \\texttt{ds}: A vector of UFF datasets that contains dimensional data to be converted.\n\n\n\\item \\texttt{ds164}: A Dataset164 object that provides conversion factors (default: Dataset164() with SI units).\n\n\\end{itemize}\n\\textbf{Notes}\n\nconvert\\emph{to}si!(ds) reads the last encountered 164 dataset and uses its conversion factors for converting subsequent datasets.\n\nconvert\\emph{to}si!(ds, ds164) provides the conversion factors directly. Worth to use when \\texttt{ds} does not contain a \\texttt{Dataset164} or when using broadcasting.\n\n\\textbf{Output}\n\n\\begin{itemize}\n\\item \\texttt{ds}: Dataset with its data converted to SI units.\n\n\\end{itemize}\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "15",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "# readuff returns a vector of datasets\n",
+                "datasets = readuff(\"path/to/your/file.uff\")\n",
+                "\n",
+                "# Convert all datasets to SI units - This assumes that a Dataset164 is present in the file. Otherwise, default SI conversion factors will be used.\n",
+                "convert_to_si!(datasets)\n",
+                "\n",
+                "# Convert all datasets to SI units using a specific Dataset164 - Useful when no Dataset164 is present in the file\n",
+                "ds164 = Dataset164(9, \"User Defined\", 2, 0.3048, 4.44822, 1., 273.15)  # Example conversion factors\n",
+                "convert_to_si!(datasets, ds164)\n",
+                "\n",
+                "# Convert all datasets to SI units using broadcasting - Useful to convert only a subset of datasets\n",
+                "convert_to_si!.(datasets, Ref(ds164))\n",
+                "```\n",
+                "\n",
+                "## Dataset 55 to matrix\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "16",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "# | echo: false\n",
+                "@doc dataset55_to_mat"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  No documentation found.\n\n  Binding \u001b[36mMain.Notebook.dataset55_to_mat\u001b[39m does not exist.",
+                        "text/markdown": "No documentation found.\n\nBinding `Main.Notebook.dataset55_to_mat` does not exist.\n",
+                        "text/html": "<div class=\"markdown\"><p>No documentation found.</p>\n<p>Binding <code>Main.Notebook.dataset55_to_mat</code> does not exist.</p>\n</div>",
+                        "text/latex": "No documentation found.\n\nBinding \\texttt{Main.Notebook.dataset55\\_to\\_mat} does not exist.\n\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "17",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "# Let's assume you have read a UFF file containing dataset 55 only\n",
+                "data55 = readuff(\"path/to/your/file55.uff\")\n",
+                "\n",
+                "# Convert dataset 55 to a matrix\n",
+                "matrix55, x = dataset55_to_mat(data55)\n",
+                "```\n",
+                "\n",
+                "## Dataset 58 to matrix\n",
+                "\n",
+                "::: {.api}"
+            ]
+        },
+        {
+            "id": "18",
+            "cell_type": "code",
+            "metadata": {
+            },
+            "source": [
+                "# | echo: false\n",
+                "@doc dataset58_to_mat"
+            ],
+            "outputs": [
+                {
+                    "output_type": "execute_result",
+                    "execution_count": 1,
+                    "data": {
+                        "text/plain": "  No documentation found.\n\n  Binding \u001b[36mMain.Notebook.dataset58_to_mat\u001b[39m does not exist.",
+                        "text/markdown": "No documentation found.\n\nBinding `Main.Notebook.dataset58_to_mat` does not exist.\n",
+                        "text/html": "<div class=\"markdown\"><p>No documentation found.</p>\n<p>Binding <code>Main.Notebook.dataset58_to_mat</code> does not exist.</p>\n</div>",
+                        "text/latex": "No documentation found.\n\nBinding \\texttt{Main.Notebook.dataset58\\_to\\_mat} does not exist.\n\n"
+                    },
+                    "metadata": {
+                    }
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "id": "19",
+            "cell_type": "markdown",
+            "metadata": {
+            },
+            "source": [
+                ":::\n",
+                "\n",
+                "```julia\n",
+                "using UFFFiles\n",
+                "\n",
+                "# Let's assume you have read a UFF file containing dataset 58 only\n",
+                "data58 = readuff(\"path/to/your/file58.uff\")\n",
+                "\n",
+                "# Convert dataset 58 to a matrix\n",
+                "matrix58, x = dataset58_to_matrix(data58)\n",
+                "```"
+            ]
+        }
+    ],
+    "timestamp": "2025-12-04T10:32:30.187",
+    "file": "/Users/maucejo/Documents/01_Recherche/04_Projets/Codes/Julia/UFFFiles/docs/usage/helper.qmd",
+    "qnr_schema_version": "1.0.0"
+}

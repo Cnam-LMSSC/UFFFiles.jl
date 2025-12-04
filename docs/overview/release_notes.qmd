@@ -12,6 +12,8 @@ format:
 
 - Add `collect_to_mat` function to replace `dataset55_to_mat` and `dataset58_to_mat` functions. This new function can handle both `Dataset55` and `Dataset58` objects.
 
+- Add `convert_to_si!` function that can convert units of multiple datasets at once.
+
 ## v1.0.2
 
 - Improve internals implementation to deal with files that have inconsistent line header.

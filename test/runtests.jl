@@ -239,7 +239,6 @@ end
         @test ds[1].disp_coord_system == ds1[1].disp_coord_system
         @test ds[1].color == ds1[1].color
         @test ds[1].node_coords ≈ ds1[1].node_coords
-
 end
 
 
@@ -259,7 +258,6 @@ end
         @test ds[1].nodes_per_elt == ds1[1].nodes_per_elt
         @test ds[1].connectivity == ds1[1].connectivity
         @test ds[1].beam_info == ds1[1].beam_info
-
 end
 
 
