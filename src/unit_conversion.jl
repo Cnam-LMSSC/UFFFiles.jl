@@ -16,77 +16,42 @@ Note that the mass is defined as F/a and its units will be determined by F & a
 
 convert_to_si!(ds) reads the last encountered 164 dataset and uses its conversion factors, defaults to SI
 convert_to_si!(ds, ds164) ignores the dataset164 datasets in the vector of datasets and uses the argument ds164
-convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.) 
+convert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 0.)
             creates a ds164 and acts the same as convert_to_si!(ds, ds164)
 
 **Output**
 - `ds`: Dataset with its data converted to SI units.
 """
-function convert_to_si!(dsconvert_to_si!(ds, conversion_length = 1., conversion_force = 1., conversion_temperature = 1., temperature_offset = 273.15))
-    ds164 = Dataset164(1,"User Defined", 2, conversion_length, conversion_force, conversion_temperature, temperature_offset)
-    convert_to_si!(ds, ds164)
-end
-
-function convert_to_si!(datasets::Vector{UFFDataset})
-    # This function uses the dataset164 in the vector of datasets to 
-    # perform the conversion, with a default of SI until the first 
-    # dataset164 is read
-    ds164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15)
+function convert_to_si!(datasets::Vector{UFFDataset}, ds164::Dataset164 = Dataset164())
     for ds in datasets
         if replace(string(ds.type), "Dataset" => "") in supported_datasets()
-            ds164 = convert_to_si!(ds, ds164)
+            convert_to_si!(ds, ds164)
         else
             @warn "File type $(ds.type) not support for unit conversions"
         end
     end
-    return nothing
 end
 
-function convert_to_si!(datasets::Vector{UFFDataset}, ds164::Dataset164)
-    # This function uses the ds164 as the 2nd argument to 
-    # perform the conversion, regardless of the dataset164's that are in
-    # the vector of datasets
-    for ds in datasets
-        if replace(string(ds.type), "Dataset" => "") in supported_datasets()
-            _ = convert_to_si!(ds, ds164)
-        else
-            @warn "File type $(ds.type) not support for unit conversions"
-        end
-    end
-    return nothing
-end
-
-function convert_to_si!(ds::Dataset15, ds164)
-
+function convert_to_si!(ds::Dataset15, ds164::Dataset164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15))
     ds.node_coords ./= ds164.conversion_length
-    return ds164
 end
 
-function convert_to_si!(ds::Dataset18, ds164)
-
+function convert_to_si!(ds::Dataset18, ds164::Dataset164 = Dataset164(1,"SI", 2, 1.0, 1.0, 1.0, 273.15))
     ds.cs_origin ./= ds164.conversion_length
     ds.cs_x ./= ds164.conversion_length
     ds.cs_xz ./= ds164.conversion_length
-    return ds164
 end
 
+function convert_to_si!(ds::Dataset82, ds164::Dataset164) end
 
-function convert_to_si!(ds::Dataset82, ds164)
+function convert_to_si!(ds::Dataset151, ds164::Dataset164) end
 
-    return ds164
-end
-
-function convert_to_si!(ds::Dataset151, ds164)
-
-    return ds164
-end
-
-function convert_to_si!(ds::Dataset55, ds164)
-
+function convert_to_si!(ds::Dataset55, ds164::Dataset164)
     # Convert data vector
     # Implemented for  data types 8, 11, 12, 9, 13, 15
 
     factor = 1.
+
     # Data Type
     if any(ds.spec_dtype .== (0, 1))
         factor /= 1.
@@ -101,11 +66,9 @@ function convert_to_si!(ds::Dataset55, ds164)
     end
 
     ds.data .*= factor
-    return ds164
 end
 
-function convert_to_si!(ds::Dataset58, ds164)
-
+function convert_to_si!(ds::Dataset58, ds164::Dataset164)
     # Convert data vector
     # Implemented for ordinate data types 8, 11, 12, 9, 13, 15
 
@@ -115,60 +78,58 @@ function convert_to_si!(ds::Dataset58, ds164)
         @warn "Unit Conversion not implemented for abscissa"
     end
 
-    factor = 1.
     # Ordinate Numerator
+    factor_num = 1.
     if any(ds.ord_spec_dtype .== (0, 1))
-        factor /= 1.
+        factor_num /= 1.
     elseif any(ds.ord_spec_dtype .== (8, 11, 12))
-        factor /= ds164.conversion_length
+        factor_num /= ds164.conversion_length
     elseif any(ds.ord_spec_dtype .== (9, 13))
-        factor /= ds164.conversion_force
+        factor_num /= ds164.conversion_force
     elseif any(ds.ord_spec_dtype .== (15))
-        factor /= (ds164.conversion_force/ds164.conversion_length^2)
+        factor_num /= (ds164.conversion_force/ds164.conversion_length^2)
     else
         @warn "Conversion factor for $(ds.ord_spec_dtype) not implemented, please submit PR"
     end
 
     # Ordinate Denominator
+    factor_denom = 1.
     if any(ds.ord_denom_spec_dtype .== (0, 1))
-        factor *= 1.
+        factor_denom /= 1.
     elseif any(ds.ord_denom_spec_dtype .== (8, 11, 12))
-        factor *= ds164.conversion_length
+        factor_denom /= ds164.conversion_length
     elseif any(ds.ord_denom_spec_dtype .== (9, 13))
-        factor *= ds164.conversion_force
+        factor_denom /= ds164.conversion_force
     elseif any(ds.ord_denom_spec_dtype .== (15))
-        factor *= (ds164.conversion_force/ds164.conversion_length^2)
+        factor_denom /= (ds164.conversion_force/ds164.conversion_length^2)
     else
         @warn "Conversion factor for $(ds.ord_denom_spec_dtype) not implemented, please submit PR"
     end
 
-    ds.data .*= factor
-    return ds164
+    ds.data .*= (factor_num / factor_denom)
 end
 
-function convert_to_si!(ds::Dataset164, ds164)
-
-    return ds
+function convert_to_si!(ds::Dataset164, ds164::Dataset164)
+    @warn "A Dataset164 was encountered during unit conversion. Overriding its values with the provided Dataset164."
+    ds164.units = ds.units
+    ds164.description = ds.description
+    ds164.temperature_mode = ds.temperature_mode
+    ds164.conversion_length = ds.conversion_length
+    ds164.conversion_force = ds.conversion_force
+    ds164.conversion_temperature = ds.conversion_temperature
+    ds164.conversion_temperature_offset = ds.conversion_temperature_offset
 end
 
-function convert_to_si!(ds::Dataset1858, ds164)
+function convert_to_si!(ds::Dataset1858, ds164::Dataset164) end
 
-    return ds164
+function convert_to_si!(ds::Dataset2411, ds164::Dataset164)
+    ds.node_coords ./= ds164.conversion_length
 end
 
-function convert_to_si!(ds::Dataset2411, ds164)
+function convert_to_si!(ds::Dataset2412, ds164::Dataset164) end
 
-    ds.node_coords ./= conversion_length
-end
-
-function convert_to_si!(ds::Dataset2412, ds164)
-
-    return ds164
-end
-
-function convert_to_si!(ds::Dataset2414, ds164)
+function convert_to_si!(ds::Dataset2414, ds164::Dataset164)
     # To Do
 
     @warn "Not yet implemented"
-    return ds164
 end

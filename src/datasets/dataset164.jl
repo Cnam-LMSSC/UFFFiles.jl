@@ -14,7 +14,7 @@ A struct containing UFF Dataset 164 (Units) data.
 - `conversion_temperature::Float64`: Units factors for converting to SI units
 - `conversion_temperature_offset::Float64`: Units factors for converting to SI units
 """
-@show_data struct Dataset164 <: UFFDataset
+@show_data mutable struct Dataset164 <: UFFDataset
     # Fields specific to Dataset164
     type::Symbol                            # Data set type
     name::String                            # Data set name
@@ -28,13 +28,13 @@ A struct containing UFF Dataset 164 (Units) data.
 
     Dataset164(
         units = 1,
-        description = "",
-        temperature_mode = 0,
+        description = "SI",
+        temperature_mode = 2,
         conversion_length = 1.,
         conversion_force = 1.,
         conversion_temperature = 1.,
-        conversion_temperature_offset = 0.
-    ) = new(:Dataset164, "Units",units, description, temperature_mode, conversion_length, conversion_force, conversion_temperature, conversion_temperature_offset)
+        conversion_temperature_offset = 273.15
+    ) = new(:Dataset164, "Units", units, description, temperature_mode, conversion_length, conversion_force, conversion_temperature, conversion_temperature_offset)
 end
 
 """
@@ -78,7 +78,7 @@ function parse_dataset164(io)
     r2 = readline(io)
     r2 = replace(r2, 'D' => 'E')
     conversion_length, conversion_force, conversion_temperature = @scanf(r2, "%25e%25e%25e", Float64, Float64, Float64)[2:end]
-    
+
     r3 = readline(io)
     r3 = replace(r3, 'D' => 'E')
     conversion_temperature_offset = @scanf(r3, "%25e", Float64)[2]
