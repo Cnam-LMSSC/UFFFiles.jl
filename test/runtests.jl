@@ -5,10 +5,6 @@ using Glob
 cd(@__DIR__)
 @show(pwd())
 
-@testset "UFFFiles.jl" begin
-    # Write your tests here.
-end
-
 readpath = "datasets"
 writepath = "written_datasets"
 
@@ -17,9 +13,9 @@ writepath = "written_datasets"
 # Dataset15
 @testset "dataset15" begin
         filename = "dataset15.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].node_ID == ds1[1].node_ID
@@ -32,9 +28,9 @@ end
 # Dataset18
 @testset "dataset18" begin
         filename = "dataset18.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].cs_num ≈ ds1[1].cs_num
@@ -51,9 +47,9 @@ end
 # Dataset55
 @testset "dataset55" begin
         filename = "dataset55.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].id1 == ds1[1].id1
@@ -102,9 +98,9 @@ end
     for filename in filenames
         # println("Start $filename")
         filename = splitpath(filename)[end]
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
         ab = ds[1].abscissa ≈ ds1[1].abscissa
         or = ds[1].data ≈ ds1[1].data
@@ -146,9 +142,9 @@ end
 # Dataset82
 @testset "dataset82" begin
         filename = "dataset82.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].line_number == ds1[1].line_number
@@ -161,9 +157,9 @@ end
 # Dataset151
 @testset "dataset151" begin
         filename = "dataset151.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].model_name == ds1[1].model_name
@@ -182,9 +178,9 @@ end
 # Dataset164
 @testset "dataset164" begin
         filename = "dataset164.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].units == ds1[1].units
@@ -194,15 +190,14 @@ end
         @test ds[1].conversion_force == ds1[1].conversion_force
         @test ds[1].conversion_temperature == ds1[1].conversion_temperature
         @test ds[1].conversion_temperature_offset == ds1[1].conversion_temperature_offset
-
 end
 
 # Dataset1858
 @testset "dataset1858" begin
         filename = "dataset1858.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].set_record_number == ds1[1].set_record_number
@@ -234,9 +229,9 @@ end
 # Dataset2411
 @testset "dataset2411" begin
         filename = "dataset2411.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].nodes_ID == ds1[1].nodes_ID
@@ -251,9 +246,9 @@ end
 # Dataset2412
 @testset "dataset2412" begin
         filename = "dataset2412.unv"
-        ds = readuff(joinpath(readpath, filename));
+        ds = readuff(joinpath(readpath, filename))
         writeuff(joinpath(writepath, filename), ds)
-        ds1 = readuff(joinpath(writepath, filename));
+        ds1 = readuff(joinpath(writepath, filename))
         rm(joinpath(writepath, filename))
 
         @test ds[1].elements_ID == ds1[1].elements_ID
@@ -298,6 +293,22 @@ end
             @test ntd(ds[1].data_info) == ntd(ds1[1].data_info)
             @test ntd(ds[1].data_value) == ntd(ds1[1].data_value)
         end
+
+@testset "convert_to_si" begin
+        # the dataset 55 is displacement
+        filename = "dataset151_164_58_55.unv"
+        ds = readuff(joinpath(readpath, filename))
+        ds55data = 0.0254 .* ds[4].data
+        dss = deepcopy(ds)
+        convert_to_si!(dss)
+
+        # a single test there are many more cases
+        @test ds55data ≈ dss[4].data
+        
+        ds58data = 0.0254/4.4482216152605 .* ds[3].data
+        @test ds58data ≈ dss[3].data
+end
+
 end
 
 
