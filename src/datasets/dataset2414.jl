@@ -197,7 +197,7 @@ For `data_info`, the structure depends on `dataset_location`:
     int_analysis_type::NamedTuple   # Record 10-11 - field 1
     real_analysis_type::NamedTuple  # Record 12-13 - field 1
 
-    data_info::NamedTuple  # Record 14 - fields depend on analysis type
+    data_info::NamedTuple      # Record 14 - fields depend on analysis type
     data_value::AbstractArray  # Record 15 - fields depend on analysis type
 
     function Dataset2414(
