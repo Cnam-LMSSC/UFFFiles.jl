@@ -21,6 +21,39 @@ A struct containing UFF Dataset 55 (Data at nodes) data.
 - `r8::NamedTuple`: Analysis type specific
 - `node_number::Vector{Int}`: Node numbers
 - `data::Matrix{Union{Float64, ComplexF64}}`: Data values
+
+
+**Note on r7 and r8 fields**
+
+These fields are stored as NamedTuples to accommodate the varying structure based on the analysis type. The specific fields within these NamedTuples depend on the `analysis_type` value, as detailed in the UFF documentation for Dataset 55.
+
+if `analysis_type == 0` (Unknown):
+- `r7`: (field1::Int, field2::Int, ID_number::Int)
+- `r8`: (field1::Float64,)
+
+if `analysis_type == 1` (Static):
+- `r7`: (field1::Int, field2::Int, load_case_num::Int)
+- `r8`: (field1::Float64,)
+
+if `analysis_type == 2` (Normal Mode):
+- `r7`: (field1::Int, field2::Int, load_case::Int, mode_number::Int)
+- `r8`: (freq::Float64, modal_mass::Float64, modal_visc_dr::Float64, modal_hyst_dr::Float64)
+
+if `analysis_type == 3` (Complex Eigenvalue):
+- `r7`: (field1::Int, field2::Int, load_case_num::Int, mode_number::Int)
+- `r8`: (real_eigval::Float64, imag_eigval::Float64, real_modalA::Float64, imag_modalA::Float64, real_modalB::Float64, imag_modalB::Float64)
+
+if `analysis_type == 4` (Transient):
+- `r7`: (field1::Int, field2::Int, load_case_num::Int, time_step_num::Int)
+- `r8`: (time::Float64,)
+
+if `analysis_type == 5` (Frequency Response):
+- `r7`: (field1::Int, field2::Int, load_case_num::Int, freq_step_num::Int)
+- `r8`: (freq::Float64,)
+
+if `analysis_type == 6` (Buckling):
+- `r7`: (field1::Int, field2::Int, load_case_num::Int)
+- `r8`: (eigval::Float64,)
 """
 @show_data struct Dataset55 <: UFFDataset
     # Fields specific to Dataset55
