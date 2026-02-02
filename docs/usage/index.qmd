@@ -61,3 +61,14 @@ writeuff("path/to/your/file.uff", data)
 @doc writeuff
 ```
 :::
+
+## FileIO interface
+
+`UFFFiles.jl` integrates with the [FileIO.jl](https://github.com/JuliaIO/FileIO.jl) package, allowing you to use the `load` and `save` functions for UFF files.
+
+```julia
+using UFFFiles, FileIO
+
+data = load("path/to/your/file.uff")
+save("path/to/your/output_file.uff", data)
+```

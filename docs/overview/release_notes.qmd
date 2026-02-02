@@ -6,6 +6,12 @@ format:
     number-sections: false
 ---
 
+## v1.2.0
+
+**Breaking changes**
+
+- Add FileIO integration to allow reading and writing UFF files using the `load` and `save` functions from the FileIO package.
+
 ## v1.1.0
 
 **Breaking changes**

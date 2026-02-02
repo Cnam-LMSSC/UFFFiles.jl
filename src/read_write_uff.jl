@@ -51,7 +51,7 @@ function readuff(filename::String)
 end
 
 # FileIO integration
-# fileio_load(file::File{FileIO.format"UFF"}) = readuff(file.filename)
+fileio_load(file::File{FileIO.format"UFF"}) = readuff(file.filename)
 
 """
     writeuff(filename::String, data::Vector{UFFDataset}; w58b)
@@ -83,4 +83,4 @@ function writeuff(filename::String, datasets; w58b::Bool = false)
 end
 
 # FileIO integration
-# fileio_save(file::File{format"UFF"}, data) = writeuff(file.filename, data)
+fileio_save(file::File{format"UFF"}, data) = writeuff(file.filename, data)
