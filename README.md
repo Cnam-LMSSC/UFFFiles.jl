@@ -67,4 +67,4 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 MIT licensed
 
-Copyright (C) 2025 Mathieu AUCEJO (maucejo)
+Copyright (C) 2026 Mathieu AUCEJO (maucejo)
