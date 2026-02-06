@@ -110,4 +110,4 @@ This package is under [MIT License](https://opensource.org/license/mit).
 
 If you use `UFFFiles.jl` in your research, please consider citing it using the following reference:
 
-[1] M. AUCEJO, « UFFFiles.jl ». Zenodo, 2026. doi: 10.5281/zenodo.18504532.
+[1] M. AUCEJO and contributors, « UFFFiles.jl ». Zenodo, 2026. doi: 10.5281/zenodo.18504532.
